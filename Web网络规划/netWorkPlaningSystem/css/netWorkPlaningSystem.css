@@ -1,0 +1,123 @@
+body{
+    width: 100%;
+    height: 100%;
+}
+
+.netWorkPlaningSystem{
+    width: 100%;
+    height: 100%;
+}
+
+.box{
+    width: 100%;
+    height: 100%;
+}
+
+.el-aside{
+    border-right:2px dashed #e8eaec;
+}
+
+.el-row{
+    width: 100%;
+    text-align: center;
+    margin: 30px auto;
+}
+
+.el-main{
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+}
+/* .el-main>canvas{
+    width: 200%;
+    height: 200%;
+    transform-origin: 0 0;
+    transform:scale(0.5)
+} */
+.el-footer{
+    border-top:2px dashed #e8eaec;
+    padding: 0;
+}
+.el-tabs{
+    height: 100%;
+    width: 100%;
+}
+.el-tab-pane>img{
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.check-in{
+    box-shadow:  0 4px 8px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    border: 2px #BCAAA4 solid;
+}
+.alert-message{
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+}
+
+.ip-box,.mark-box{
+    width: 100%;
+    height: 40px;
+    text-align: center;
+}
+
+.portInfoDialog{
+    width: 60%;
+}
+.el-form-item{
+    width: 100%;
+    text-align: center;
+}
+.studentsTopoInfoBox{
+    width: 100%;
+    height: 100%;
+
+}
+.nonContentBox{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: medium;
+}
+
+.stufentTopoInfoBox{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.topoBox{
+    padding: 10px 10px;
+    text-align: center;
+    border-radius: 5px;
+    border: transparent solid 2px;
+}
+
+.topoBox:hover{
+    border-color: #409EFF;
+    cursor: pointer;
+}
+
+.topo-img{
+    display: block;
+    width: 150px;
+    height: 92px;
+}
+.topo-name{
+    width: 100%;
+}
+
+.score-title{
+    font-size: 16px;
+    color: #303133;
+}

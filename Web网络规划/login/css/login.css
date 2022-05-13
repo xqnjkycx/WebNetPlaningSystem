@@ -1,0 +1,68 @@
+body{
+    width: 100%;
+    height: 100%;
+}
+
+.index{
+    width: 100%;
+    height: 100%;
+    background: url("./../../images/internet-bg.jpg");
+    background-size: cover;
+}
+.el-container{
+    height: 380px;
+    width: 400px; 
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:#F5F5F5;
+    border-radius: 15px;
+    opacity: 0.5;
+    transition: all 1.5s;
+}
+.el-container:hover{
+    opacity: 1;
+}
+.el-header{
+    line-height: 60px;
+    text-align: center;
+    color: #606266;
+}
+
+.user-box{
+    display: flex;
+    align-items: baseline;
+}
+.user-box>span,.password-box>span,.class-box>span{
+    margin-right: 10px;
+}
+
+.class-box{
+    display: flex;
+    align-items: baseline;
+    margin: 20px 0;
+}
+
+.teacher-box{
+    margin: 20px 0;
+    display: flex;
+    align-items: baseline;
+}
+
+.password-box{
+    margin: 20px 0;
+    display: flex;
+    align-items: baseline;
+}
+
+.identity-box{
+    text-align: center;
+    margin-bottom: 30px;
+}
+.el-button{
+    width: 100%;
+    margin: 0 auto;
+}

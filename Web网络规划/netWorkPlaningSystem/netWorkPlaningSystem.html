@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/netWorkPlaningSystem.css">
+    <title>Web网络规划训练系统</title>
+</head>
+
+<body>
+    <div id="netWorkPlaningSystem" class="netWorkPlaningSystem">
+        <el-container class="box">
+            <!--侧边工具栏-->
+            <el-aside width="200px">
+                <el-row>
+                    <el-button type="primary" id="runNetBtn" name="theBtn">运行网络</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="success" name="theBtn" permission="student" id="watchScoreBtn">查看评分</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="info" id="resetTopoBtn" name="theBtn" permission="student">重置网络</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="info" id="saveTopoBtn" name="theBtn" permission="student">保存网络</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="info" id="readTopoBtn" name="theBtn" permission="student">读取网络</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="warning" id="readSubmitnetBtn" name="theBtn" permission="student">读取作业</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="danger" id="submitTopoBtn" name="theBtn" permission="student">提交作业</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="primary" name="theBtn" permission="teacher" id="searchHomeworkBtn">查看作业</el-button>
+                </el-row>
+                <el-row>
+                    <el-button type="danger" name="theBtn" permission="teacher" id="submitScoreBtn"
+                        :disabled="disSubmitScoreBtn">提交评分</el-button>
+                </el-row>
+            </el-aside>
+            <el-container>
+                <el-main id="el-main" v-loading="loading">
+                    <canvas id="canvas"></canvas>
+                </el-main>
+                <!--底部选项卡-->
+                <el-footer height="200px">
+                    <el-tabs type="border-card" id="border-card">
+                        <el-tab-pane label="连线" name="line">
+                            <img src="./../images/line.png" name="Line">
+                        </el-tab-pane>
+                        <el-tab-pane label="主机">
+                            <img src="./../images/zhuji1.png" name="HostComputer">
+                        </el-tab-pane>
+                        <el-tab-pane label="路由器">
+                            <img src="./../images/luyou.png" name="Router">
+                        </el-tab-pane>
+                        <el-tab-pane label="其它">
+                            <img src="./../images/envelope1.png" name="Envelope" />
+                        </el-tab-pane>
+                    </el-tabs>
+                </el-footer>
+            </el-container>
+        </el-container>
+        <!--路由端口的配置 弹窗-->
+        <el-dialog title="配置路由端口信息" :visible.sync="alertSetRouterInfoFlag" center class=".portInfoDialog">
+            <el-form>
+                <el-form-item v-for="item in routerPorts" :key="item.name">
+                    <span> {{item.name}} </span>
+                    <el-input size="small" style="width: 200px;" type="text" v-model="item.tag" placeholder="输入端口标识">
+                    </el-input>
+                    <el-input size="small" style="width: 200px;" type="text" v-model="item.ipAddress"
+                        placeholder="输入端口ip地址"></el-input>
+                    <el-input size="small" style="width: 200px;" type="text" v-model="item.ipMask"
+                        placeholder="输入端口ip掩码"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="alertSetRouterInfoFlag = false">取 消</el-button>
+                <el-button type="primary" @click="alertSetRouterInfoFlag = false">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!--路由表的配置 弹窗-->
+        <el-dialog title="配置路由表信息" :visible.sync="alertSetRoutingTableFlag" center class=".portInfoDialog">
+            <el-form>
+                <el-form-item v-for="item in routerTable" :key="item.name">
+                    <span> {{item.name}} </span>
+                    <el-input size="small" style="width: 200px;" type="text" v-model="item.targetNet"
+                        placeholder="输入目标网络"></el-input>
+                    <el-input size="small" style="width: 200px;" type="text" v-model="item.targetMask"
+                        placeholder="输入目标子网掩码"></el-input>
+                    <el-input size="small" style="width: 200px;" type="text" v-model="item.nextJump"
+                        placeholder="输入下一跳地址"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="alertSetRoutingTableFlag = false">取 消</el-button>
+                <el-button type="primary" @click="alertSetRoutingTableFlag = false">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 学生查看弹窗 -->
+        <el-dialog title="作业评分" :visible.sync="alertStudentWatchSocreFlag" center>
+            <div style="margin-bottom: 10px;"><span class="score-title">系统评分: </span><span>{{systemScore}}</span></div>
+            <div style="margin-bottom: 10px;"><span class="score-title">教师评分: </span><span>{{teacherScore}}</span></div>
+            <p class="score-title">教师评语: </p>
+            <p style="margin-top: 10px;"> {{teacherComment}}</p>
+        </el-dialog>
+        <!-- 查看已保存网络 弹窗-->
+        <el-dialog title="查看已保存网络" :visible.sync="alertReadTopoFlag" center class=".portInfoDialog">
+            <el-form v-if="studentsTopoInfo.length != 0" class="stufentTopoInfoBox">
+                <el-from-item v-for="item in studentsTopoInfo" :key="item.name">
+                    <div class="topoBox" @click="selectTopo(item.topoName)">
+                        <img class="topo-img" :src="item.imgUrl">
+                        <span class="topo-name">
+                            {{item.topoName}}
+                        </span>
+                    </div>
+                </el-from-item>
+            </el-form>
+            <div class="nonContentBox" v-else>
+                你还没有保存任何的网络结构
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="alertReadTopoFlag = false">取 消</el-button>
+                <el-button type="primary" @click="alertReadTopoFlag = false">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 教师查看作业 弹窗-->
+        <el-dialog title="查询学生作业" :visible.sync="alertSearchHomeWorkFlag" center class=".portInfoDialog">
+            <el-form>
+                <el-select v-model="classnum" placeholder="请选择班级">
+                    <el-option v-for="item in classes" :key="item.classnum" :value="item.classnum">
+                    </el-option>
+                </el-select>
+                <el-select v-model="student" :disabled="studentdis" placeholder="请选择学生" style="margin-left: 20px;">
+                    <el-option v-for="item in students" :key="item.studentname" :value="item.studentname">
+                    </el-option>
+                </el-select>
+                <el-button type="success" icon="el-icon-search" :disabled="disSearchBtn" style="margin-left: 20px;"
+                    id="searchBtn">查询</el-button>
+            </el-form>
+        </el-dialog>
+        <!-- 教师提交评分 弹窗-->
+        <el-dialog title="学生作业评分" :visible.sync="alertgiveScoreFlag" center class=".portInfoDialog">
+            <el-form>
+                <el-input v-model="score" placeholder="请输入分数" style="margin-bottom: 20px;"></el-input>
+                <p></p>
+                <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 4}" placeholder="请输入评语" v-model="comment"
+                    style="margin-bottom: 20px;">
+                </el-input>
+                <el-button type="success" :disabled="disSubmitScore" center id="submitScore"
+                    @click="submitScoreAndComment()">上传评分<i class="el-icon-upload el-icon--right"></i></el-button>
+            </el-form>
+        </el-dialog>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./tools/elementUi.js"></script>
+    <script src="./../other/dom-to-image.min.js"></script>
+    <script src="./js/netWorkPlaningSystem.js" type="module"></script>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web网络规划登录系统</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app" class="index">
+        <el-container>
+            <el-header>Web网络规划登录系统</el-header>
+            <el-main>
+                <div class="teacher-box" v-if="radio == '2'">
+                    <span>
+                        <i class="el-icon-user"></i>
+                    </span>
+                    <el-input placeholder="请输入教师名" v-model="teachername"></el-input>
+                </div>
+                <div class="user-box" v-show="radio == '1'">
+                    <span>
+                        <i class="el-icon-user"></i>
+                    </span>
+                    <el-input placeholder="请输入学号" v-model="userid"></el-input>
+                </div>
+                <div class="class-box" v-show="radio === '1'">
+                    <span>
+                        <i class="el-icon-s-home"></i>
+                    </span>
+                    <el-input placeholder="请输入班级" v-model="classid"></el-input>
+                </div>
+                <div class="password-box" v-show="radio === '1'">
+                    <span>
+                        <i class="el-icon-edit"></i>
+                    </span>
+                    <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
+                </div>
+                <div class="identity-box">
+                    <el-radio v-model="radio" label="1">学生</el-radio>
+                    <el-radio v-model="radio" label="2">教师</el-radio>
+                </div>
+                <el-button type="success" :disabled="loginBtndisabled" id="loginBtn">登入</el-button>
+            </el-main>
+        </el-container>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./tools/elementUi.js"></script>
+    <script src="./login.js"></script>
+</body>
+</html>
